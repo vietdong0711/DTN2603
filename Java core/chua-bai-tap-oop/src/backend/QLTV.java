@@ -5,6 +5,12 @@ import entity.Sach;
 import entity.TaiLieu;
 import entity.TapChi;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +24,9 @@ public class QLTV implements IQLTV {
         scanner = new Scanner(System.in);
         // khởi tạo các gtri cho ds tai lieu
         this.taiLieus = new ArrayList<>();
-        taiLieus.add(new Bao("bao1", "NXB1", 100, LocalDate.of(2020, 1, 1)));
-        taiLieus.add(new Sach("sach1", "NXB2", 200, "ABC", 55));
-        taiLieus.add(new TapChi("tapchi1", "NXB3", 300, "Số 1", 1));
+//        taiLieus.add(new Bao("bao1", "NXB1", 100, LocalDate.of(2020, 1, 1)));
+//        taiLieus.add(new Sach("sach1", "NXB2", 200, "ABC", 55));
+//        taiLieus.add(new TapChi("tapchi1", "NXB3", 300, "Số 1", 1));
     }
 
 
@@ -86,11 +92,43 @@ public class QLTV implements IQLTV {
 
     @Override
     public void hienThiThongTin() {
+        List<TaiLieu> list = new ArrayList<>();
+        // b1: lấy dữ liệu từ database
+        // 1.1 kết nối đến database   hostname+ port: localhost:3306    username: root     password: root   DB:qltv
+        String url = "jdbc:mysql://localhost:3306/qltv";
+        String username = "root";
+        String password = "root";
+        try{
+            // kết nối
+            Connection connection = DriverManager.getConnection(url, username, password);
+            if (connection != null) {
+                System.out.println("Kết nối DB thành công");
+            } else {
+                System.out.println("Kết nối DB không thành công");
+            }
+            // tạo viết 1 câu sql để xem toàn bộ bảng tai_lieu
+            String sql = "SELECT * FROM tai_lieu;";
+            // Statement đây là đối tượng hỗ trợ thực thi câu lệnh sql tĩnh và trả về kêt quá
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);// resultSet chứa dữ liệu khi chạy cau sql
+            // lấy dữ liệu  từ ResultSet
+            while (resultSet.next()) {
+                String maTaiLieu = resultSet.getString("ma_tai_lieu");
+                String tenNXB =  resultSet.getString("ten_nxb");
+                int soBanPhatHanh =  resultSet.getInt("so_ban_phat_hanh");
+                TaiLieu taiLieu = new TaiLieu(maTaiLieu, tenNXB, soBanPhatHanh);
+                // them vao ds TaiLieu để hiển thị ra
+                list.add(taiLieu);
+            }
+        }catch(Exception e){
+        }
+
+        // b2: hiển thị
         System.out.println("+-------------------------+-------------------------+-------------------------+");
         System.out.printf("|%25s|%25s|%25s|\n", "Mã tài liệu", "Tên NXB", "Số bản phát hành");
         System.out.println("+-------------------------+-------------------------+-------------------------+");
-        if (taiLieus.size() > 0) {
-            for (TaiLieu taiLieu : taiLieus) {
+        if (list.size() > 0) {
+            for (TaiLieu taiLieu : list) {
                 System.out.printf("|%25s|%25s|%25s|\n", taiLieu.getMaTaiLieu(), taiLieu.getTenNhaXuatBan(), taiLieu.getSoBanPhatHanh());
             }
         } else {
@@ -103,31 +141,40 @@ public class QLTV implements IQLTV {
     public void timKiemTaiLieu() {
         // ds các tài liệu sẽ dc hiển thị
         List<TaiLieu> rs = new ArrayList<>();
+        String url = "jdbc:mysql://localhost:3306/qltv";
+        String username = "root";
+        String password = "root";
+        String sql = "SELECT * FROM tai_lieu where loai_tai_lieu = ?";// ? là biến
         System.out.println("Chọn loại tài liệu muốn hiển thị: 1. Sách   2. Báo  Khác. Tạp chí");
         String choice = scanner.nextLine(); //,,...
+        String value = "";
         switch (choice) {
             case "1":
-                for (TaiLieu taiLieu : taiLieus) {
-                    if (taiLieu instanceof Sach) {
-                        rs.add(taiLieu);
-                    }
-                }
+                value = "SACH";
                 break;
             case "2":
-                for (TaiLieu taiLieu : taiLieus) {
-                    if (taiLieu instanceof Bao) {
-                        rs.add(taiLieu);
-                    }
-                }
+                value = "BAO";
                 break;
             default:
-                for (TaiLieu taiLieu : taiLieus) {
-                    if (taiLieu instanceof TapChi) {
-                        rs.add(taiLieu);
-                    }
-                }
+                value = "TAP_CHI";
         }
-
+        try{
+            Connection connection = DriverManager.getConnection(url, username, password);
+            //PreparedStatement đây là đối tượng hỗ trợ thực thi câu lệnh sql động và trả về kêt quá
+            PreparedStatement statement = connection.prepareStatement(sql);
+            // gán gtri cho dấu ? = value
+            statement.setString(1, value);
+            ResultSet resultSet = statement.executeQuery();// resultSet chứa dữ liệu khi chạy cau sql
+            while (resultSet.next()) {
+                String maTaiLieu = resultSet.getString("ma_tai_lieu");
+                String tenNXB =  resultSet.getString("ten_nxb");
+                int soBanPhatHanh =  resultSet.getInt("so_ban_phat_hanh");
+                TaiLieu taiLieu = new TaiLieu(maTaiLieu, tenNXB, soBanPhatHanh);
+                // them vao ds rs để hiển thị ra
+                rs.add(taiLieu);
+            }
+        }catch(Exception e){
+        }
         System.out.println("+-------------------------+-------------------------+-------------------------+");
         System.out.printf("|%25s|%25s|%25s|\n", "Mã tài liệu", "Tên NXB", "Số bản phát hành");
         System.out.println("+-------------------------+-------------------------+-------------------------+");
@@ -139,5 +186,11 @@ public class QLTV implements IQLTV {
             System.out.printf("|%77s|\n", "Không có thông tin");
         }
         System.out.println("+-------------------------+-------------------------+-------------------------+");
+    }
+
+    public static void main(String[] args) throws SQLException {
+        QLTV qltv = new QLTV();
+//        qltv.hienThiThongTin();
+        qltv.timKiemTaiLieu();
     }
 }
