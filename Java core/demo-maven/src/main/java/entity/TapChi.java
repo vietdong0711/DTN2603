@@ -1,31 +1,19 @@
 package entity;
 
-public class TapChi extends TaiLieu {
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter// ko cần phải viết getter cho các thuoc tinh1
+@Setter
+@NoArgsConstructor// constructor ko tham số
+public class TapChi extends TaiLieu {
     private String soPhatHanh;
     private int thangPhatHanh;
-
-    public TapChi() {}
 
     public TapChi(String tenTaiLieu, String tenNhaXuatBan, int soBanPhatHanh, LoaiTaiLieu loaiTaiLieu, String soPhatHanh, int thangPhatHanh) {
         super(tenTaiLieu, tenNhaXuatBan, soBanPhatHanh, loaiTaiLieu);
         this.soPhatHanh = soPhatHanh;
-        this.thangPhatHanh = thangPhatHanh;
-    }
-
-    public String getSoPhatHanh() {
-        return soPhatHanh;
-    }
-
-    public void setSoPhatHanh(String soPhatHanh) {
-        this.soPhatHanh = soPhatHanh;
-    }
-
-    public int getThangPhatHanh() {
-        return thangPhatHanh;
-    }
-
-    public void setThangPhatHanh(int thangPhatHanh) {
         this.thangPhatHanh = thangPhatHanh;
     }
 }

@@ -24,7 +24,8 @@ public class Main {
             System.out.println("2. Xoá tài liệu theo mã tài liệu.");
             System.out.println("3. Hiện thị thông tin về tài liệu.");
             System.out.println("4. Tìm kiếm tài liệu theo loại: Sách, tạp chí, báo.");
-            System.out.println("5. Thoát khỏi chương trình.");
+            System.out.println("5. UPdate NXB cho tài liệu theo mã tài liệu.");
+            System.out.println("6. Thoát khỏi chương trình.");
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
@@ -40,6 +41,9 @@ public class Main {
                     qltv.timKiemTaiLieu();
                     break;
                 case "5":
+                    qltv.suaTenNXBTheoMaTaiLieu();
+                    break;
+                case "6":
                     System.exit(0);
                 default:
                     System.out.println("Chọn sai! chọn lại!");

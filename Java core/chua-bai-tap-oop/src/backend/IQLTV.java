@@ -7,4 +7,6 @@ public interface IQLTV {
     void xoaTaiLieu();
     void hienThiThongTin();
     void timKiemTaiLieu();
+    void suaTenNXBTheoMaTaiLieu();
+    void thongKe();
 }
