@@ -34,4 +34,8 @@ public class QLTVController {
     public boolean themTaiLieu(TaiLieu taiLieu) {
         return service.themTaiLieu(taiLieu);
     }
+
+    public boolean checkExist(String maTaiLieu) {
+        return service.checkExist(maTaiLieu);
+    }
 }

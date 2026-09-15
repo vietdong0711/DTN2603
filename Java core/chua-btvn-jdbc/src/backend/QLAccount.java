@@ -128,13 +128,6 @@ public class QLAccount implements IQLAccount {
                     positionId = position.getId();
                     break;
                 }
-//                position = positions.stream().filter(pos -> pos.getId() == Integer.parseInt(choiceDep))
-//                        .findFirst().orElse(null);// lambda
-//                if (Objects.isNull(position)) { //position == null
-//                    System.out.println("Chọn sai. Chọn lại chức vụ!");
-//                }  else {
-//                    break;
-//                }
             } else {
                 System.out.println("Chọn sai. Chọn lại chức vụ!");
                 scanner.nextLine();

@@ -113,8 +113,9 @@ public class QLTVRepositoryImpl implements IQLTVRepository {
     @Override
     public boolean themTaiLieu(TaiLieu taiLieu) {
         String sql ="";
+        Connection connection = null;
         try {
-            Connection connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnection();
             PreparedStatement preparedStatement;
 
             if (taiLieu instanceof Sach) {
@@ -143,10 +144,34 @@ public class QLTVRepositoryImpl implements IQLTVRepository {
             preparedStatement.setString(4, taiLieu.getLoaiTaiLieu().name());
 
             int c = preparedStatement.executeUpdate();
-            JDBCUtils.closeConnection(connection);
             return c > 0;
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally{
+            JDBCUtils.closeConnection(connection);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkExist(String maTaiLieu) {
+        Connection connection = null;
+        try {
+            connection = JDBCUtils.getConnection();
+
+            String sql = "SELECT * FROM tai_lieu where ma_tai_lieu = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, maTaiLieu);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                return true;// tồn tại
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally { // cho dùng thực thi try hay catch()   thì  luôn luôn chạy finally
+            JDBCUtils.closeConnection(connection);
         }
         return false;
     }

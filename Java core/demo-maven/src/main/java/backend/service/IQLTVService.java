@@ -14,4 +14,6 @@ public interface IQLTVService {
     boolean suaTaiLieuTheoMa(String maTaiLieu, String tenNXB);
 
     boolean themTaiLieu(TaiLieu taiLieu);
+
+    boolean checkExist(String maTaiLieu);
 }

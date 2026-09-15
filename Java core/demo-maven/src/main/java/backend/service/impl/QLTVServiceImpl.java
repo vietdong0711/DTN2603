@@ -40,4 +40,9 @@ public class QLTVServiceImpl implements IQLTVService {
     public boolean themTaiLieu(TaiLieu taiLieu) {
         return repository.themTaiLieu(taiLieu);
     }
+
+    @Override
+    public boolean checkExist(String maTaiLieu) {
+        return repository.checkExist(maTaiLieu);
+    }
 }

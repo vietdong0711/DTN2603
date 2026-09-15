@@ -14,4 +14,6 @@ public interface IQLTVRepository {
     boolean suaTaiLieuTheoMa(String maTaiLieu, String tenNXB);
 
     boolean themTaiLieu(TaiLieu taiLieu);
+
+    boolean checkExist(String maTaiLieu);
 }
