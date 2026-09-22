@@ -8,6 +8,7 @@ import entity.TaiLieu;
 import entity.TapChi;
 import utils.ScannerUtils;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -195,7 +196,8 @@ public class Function {// chứa các chức năng project có
             System.out.println("3. Hiện thị thông tin về tài liệu.");
             System.out.println("4. Tìm kiếm tài liệu theo loại: Sách, tạp chí, báo.");
             System.out.println("5. UPdate NXB cho tài liệu theo mã tài liệu.");
-            System.out.println("6. Thoát khỏi chương trình.");
+            System.out.println("6. Import tài liệu từ file csv.");
+            System.out.println("7. Thoát khỏi chương trình.");
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
@@ -214,10 +216,24 @@ public class Function {// chứa các chức năng project có
                     this.sua();
                     break;
                 case "6":
+                    this.importCSV();
+                    break;
+                case "7":
                     System.exit(0);
                 default:
                     System.out.println("Chọn sai! chọn lại!");
             }
         }
+    }
+
+    private void importCSV() {
+        // đưa file csv vào thông qua 1 đường dẫn: C:\Users\Admin\Desktop\DTN2603\Java core\csv\input_tailieu.csv
+        System.out.println("Nhập vào đường dẫn file csv muốn import: ");
+        String url = scanner.nextLine();
+        // đưa đường dẫn cho controller
+        String message = controller.importCSV(url);
+        // đọc file -> ds các tài liệu trong file
+        // lưu ds các tài liệu đó vào DB
+        System.out.println(message);
     }
 }

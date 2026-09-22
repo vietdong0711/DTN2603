@@ -38,4 +38,9 @@ public class QLTVController {
     public boolean checkExist(String maTaiLieu) {
         return service.checkExist(maTaiLieu);
     }
+
+    public String importCSV(String url) {
+        return service.importCSV(url);
+
+    }
 }

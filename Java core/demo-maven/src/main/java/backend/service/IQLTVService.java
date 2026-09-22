@@ -16,4 +16,6 @@ public interface IQLTVService {
     boolean themTaiLieu(TaiLieu taiLieu);
 
     boolean checkExist(String maTaiLieu);
+
+    String importCSV(String url);
 }

@@ -1,4 +1,4 @@
 maTL,tenNXB,soBanPH,loaiTL,tenTacGia,soTrang,soPH,thangPH,ngayPH(yyyy-MM-dd)
-S01,NXB1,100,SACH,tenTG,100,,,
-B01,NXB2,1000,BAO,,,,2026-01-01
+S01,N,abc,SACH,tenTG,100
+B01,NXB2,1000,BAO,,,,,2026-01-01
 TC01,NXB1,200,TAP_CHI,,,Số 1A1,9,
