@@ -9,4 +9,6 @@ public interface IAccountService {
     boolean create(Account account);
     boolean update(int id, String username);
     boolean delete(int id);
+    boolean checkUsernameExists(String username, Integer id);
+    boolean checkEmailExists(String email, Integer id);
 }

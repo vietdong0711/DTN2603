@@ -28,4 +28,12 @@ public class AccountController {
     public boolean delete(int id) {
         return service.delete(id);
     }
+
+    public boolean checkUsernameExists(String username, Integer id) {
+        return service.checkUsernameExists(username, id);
+    }
+
+    public boolean checkEmailExists(String email, Integer id) {
+        return service.checkEmailExists(email, id);
+    }
 }

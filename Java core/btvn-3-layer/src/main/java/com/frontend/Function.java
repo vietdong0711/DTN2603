@@ -32,7 +32,10 @@ public class Function {
         System.out.printf("|%5s|%25s|%25s|%25s|%25s|%25s|\n", "ID", "Username", "Full Name", "Email", "Department", "Position");
         System.out.println("+-----+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+");
         for (Account acc : accounts) {
-            System.out.printf("|%5s|%25s|%25s|%25s|%25s|%25s|\n", acc.getId(), acc.getUsername(), acc.getFullName(), acc.getEmail(), Objects.nonNull(acc.getDepartment()) ? acc.getDepartment().getName() : "", Objects.nonNull(acc.getPosition()) ? acc.getPosition().getName() : "");
+            System.out.printf("|%5s|%25s|%25s|%25s|%25s|%25s|\n"
+                    , acc.getId(), acc.getUsername(), acc.getFullName(), acc.getEmail()
+                    , Objects.nonNull(acc.getDepartment()) ? acc.getDepartment().getName() : ""
+                    , Objects.nonNull(acc.getPosition()) ? acc.getPosition().getName() : "");
         }
         System.out.println("+-----+-------------------------+-------------------------+-------------------------+-------------------------+-------------------------+");
     }
@@ -41,17 +44,51 @@ public class Function {
         System.out.println("==== CHỨC NĂNG TẠO ACCOUNT ====");
         Account account = new Account();
 
-        System.out.println("Nhập username: ");
-        String username = scanner.nextLine();
-        account.setUsername(username);
+        while (true) {
+            System.out.println("Nhập username: ");
+            String username = scanner.nextLine();
+            if (username.trim().length() < 6 || username.trim().length() > 100) {
+                System.err.println("Nhập username dài từ 6-100 kí tự");
+                continue;
+            }
+            if (accountController.checkUsernameExists(username, null)) {
+                System.err.println("Username này đã tồn tại");
+                continue;
+            }
+            account.setUsername(username);
+            break;
+        }
 
-        System.out.println("Nhập fullname: ");
-        String fullName = scanner.nextLine();
-        account.setFullName(fullName);
+        while (true) {
+            System.out.println("Nhập fullname: ");
+            String fullName = scanner.nextLine();
+            if (fullName.trim().length() < 6 || fullName.trim().length() > 100) {
+                System.err.println("Nhập fullname dài từ 6-100 kí tự");
+                continue;
+            }
+            account.setFullName(fullName);
+            break;
+        }
 
-        System.out.println("Nhập email: ");
-        String email = scanner.nextLine();
-        account.setEmail(email);
+        while (true) {
+            System.out.println("Nhập email: ");
+            String email = scanner.nextLine();
+            if (email.trim().length() < 6 || email.trim().length() > 100) {
+                System.err.println("Nhập email dài từ 6-100 kí tự");
+                continue;
+            }
+            // a@lgcns.com
+            if (!email.matches("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$")) {
+                System.err.println("email không đúng định dạng");
+                continue;
+            }
+            if (accountController.checkEmailExists(email, null)) {
+                System.err.println("email này đã tồn tại");
+                continue;
+            }
+            account.setEmail(email);
+            break;
+        }
 
         while (true) {
             System.out.println("Chọn ID phòng ban muốn thêm vào: ");
@@ -61,7 +98,8 @@ public class Function {
             }
             if (scanner.hasNextInt()) {
                 String choiceDep = scanner.nextLine();
-                Department department = departments.stream().filter(dep -> dep.getId() == Integer.parseInt(choiceDep.trim()))
+                Department department = departments.stream()
+                        .filter(dep -> dep.getId() == Integer.parseInt(choiceDep.trim()))
                         .findFirst().orElse(null);
                 if (Objects.isNull(department)) {
                     System.out.println("Chọn sai. Chọn lại phòng ban!");
@@ -82,7 +120,9 @@ public class Function {
                 System.out.printf("ID: %s - Name: %s\n", pos.getId(), pos.getName());
             }
             if (scanner.hasNextInt()) {
-                Position position = positions.stream().filter(pos -> pos.getId() == Integer.parseInt(scanner.nextLine().trim())).findFirst().orElse(null);
+                Position position = positions.stream()
+                        .filter(pos -> pos.getId() == Integer.parseInt(scanner.nextLine().trim()))
+                        .findFirst().orElse(null);
                 if (Objects.isNull(position)) {
                     System.out.println("Chọn sai. Chọn lại chức vụ!");
                 } else {
@@ -106,6 +146,7 @@ public class Function {
         System.out.println("==== CHỨC NĂNG UPDATE ====");
         System.out.println("Nhập ID muốn update: ");
         int id = 0;
+        String username = "";
         while (true) {
             if (scanner.hasNextInt()) {
                 id = scanner.nextInt();
@@ -116,8 +157,19 @@ public class Function {
                 scanner.nextLine();
             }
         }
-        System.out.println("Nhập username muốn update: ");
-        String username = scanner.nextLine();
+        while (true) {
+            System.out.println("Nhập username: ");
+            username = scanner.nextLine();
+            if (username.trim().length() < 6 || username.trim().length() > 100) {
+                System.err.println("Nhập username dài từ 6-100 kí tự");
+                continue;
+            }
+            if (accountController.checkUsernameExists(username, id)) {
+                System.err.println("Username này đã tồn tại");
+                continue;
+            }
+            break;
+        }
         boolean check = accountController.update(id, username);
         if (check) {
             System.out.println("Update successfully!");

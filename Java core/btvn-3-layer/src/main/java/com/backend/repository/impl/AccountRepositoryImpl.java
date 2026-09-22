@@ -8,7 +8,6 @@ import com.entity.PositionName;
 import com.utils.JDBCUtils;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -111,6 +110,80 @@ public class AccountRepositoryImpl implements IAccountRepository {
             return c > 0;
         } catch (Exception e) {
             e.printStackTrace();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkIdExists(int id) {
+        Connection connection = null;
+        try {
+            connection = JDBCUtils.getConnection();
+            String  sql = "select * from account where account_id = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, id);
+
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkUsernameExists(String username, Integer id) {
+                                    //      username       , id: nếu tạo  mới   Id = null, update : id có gtri
+        Connection connection = null;
+        try {
+            connection = JDBCUtils.getConnection();
+            String  sql = "select * from account where username = ?";
+            if (Objects.nonNull(id)) {
+                sql += " and account_id != ?";
+            }
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            if (Objects.nonNull(id)) {
+                statement.setInt(2, id);
+            }
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean checkEmailExists(String email, Integer id) {
+        Connection connection = null;
+        try {
+            connection = JDBCUtils.getConnection();
+            String  sql = "select * from account where email = ?";
+            if (Objects.nonNull(id)) {
+                sql += " and account_id != ?";
+            }
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, email);
+            if (Objects.nonNull(id)) {
+                statement.setInt(2, id);
+            }
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
         }
         return false;
     }

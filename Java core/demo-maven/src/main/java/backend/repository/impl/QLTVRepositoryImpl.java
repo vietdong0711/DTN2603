@@ -79,30 +79,6 @@ public class QLTVRepositoryImpl implements IQLTVRepository {
 
             int c = preparedStatement.executeUpdate();
             JDBCUtils.closeConnection(connection);
-//            if (c > 0) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-            return c > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();// show ra lỗi
-        }
-        return false;
-    }
-
-    @Override
-    public boolean suaTaiLieuTheoMa(String maTaiLieu, String tenNXB) {
-        try {
-            // kết nối
-            Connection connection = JDBCUtils.getConnection();
-            String sql = "UPDATE tai_lieu SET ten_nxb= ? WHERE ma_tai_lieu= ?";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1, tenNXB);
-            statement.setString(2, maTaiLieu);
-            int c = statement.executeUpdate();
-            JDBCUtils.closeConnection(connection);
-
             return c > 0;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,8 +87,28 @@ public class QLTVRepositoryImpl implements IQLTVRepository {
     }
 
     @Override
+    public boolean suaTaiLieuTheoMa(String maTaiLieu, String tenNXB) {
+        Connection connection = null;
+        try {
+            // kết nối
+            connection = JDBCUtils.getConnection();
+            String sql = "UPDATE tai_lieu SET ten_nxb= ? WHERE ma_tai_lieu= ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, tenNXB);
+            statement.setString(2, maTaiLieu);
+            int c = statement.executeUpdate();
+            return c > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
+        }
+        return false;
+    }
+
+    @Override
     public boolean themTaiLieu(TaiLieu taiLieu) {
-        String sql ="";
+        String sql = "";
         Connection connection = null;
         try {
             connection = JDBCUtils.getConnection();
@@ -147,7 +143,7 @@ public class QLTVRepositoryImpl implements IQLTVRepository {
             return c > 0;
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally{
+        } finally {
             JDBCUtils.closeConnection(connection);
         }
         return false;
