@@ -36,4 +36,12 @@ public class AccountController {
     public boolean checkEmailExists(String email, Integer id) {
         return service.checkEmailExists(email, id);
     }
+
+    public String importCSV(String pathName) {
+        return service.importCSV(pathName);
+    }
+
+    public boolean login(String username, String password) {
+        return  service.login(username, password);
+    }
 }

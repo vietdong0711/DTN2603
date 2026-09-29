@@ -1,0 +1,7 @@
+username,email,fullName,departmentId,positionId,password,error_message
+username1,email1@gmail.com,fullName1,1,1,123456,Username đã tồn tại|Email đã tồn tại
+username1,email1@gmail.com,fullName1,1,1,123456,Username đã tồn tại|Email đã tồn tại
+username2,email2@gmail.com,fullName2,2,2,123456,Username đã tồn tại|Email đã tồn tại
+username3,email3@gmail.com,fullName3,3,3,123456,Username đã tồn tại|Email đã tồn tại
+username4,email4@gmail.com,fullName4,4,4,123456,Username đã tồn tại|Email đã tồn tại
+,,,,,,Username không dc để trống|Email không dc để trống|FullName không dc để trống|DepartmentId phải là số|PositionId phải là số

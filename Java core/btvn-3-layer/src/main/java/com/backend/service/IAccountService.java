@@ -11,4 +11,7 @@ public interface IAccountService {
     boolean delete(int id);
     boolean checkUsernameExists(String username, Integer id);
     boolean checkEmailExists(String email, Integer id);
+    String importCSV(String pathName);
+
+    boolean login(String username, String password);
 }

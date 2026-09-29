@@ -1,0 +1,3 @@
+username,email,fullName,departmentId,positionId,password,error_message
+username1,email1@gmail.com,fullName1,1,1,123456,Username đã tồn tại|Email đã tồn tại
+,,,,,,Username không dc để trống|Email không dc để trống|FullName không dc để trống|DepartmentId phải là số|PositionId phải là số

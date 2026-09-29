@@ -1,6 +1,7 @@
 package com.backend.repository.impl;
 
 import com.backend.repository.IDepartmentRepository;
+import com.entity.Account;
 import com.entity.Department;
 import com.utils.JDBCUtils;
 

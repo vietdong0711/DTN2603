@@ -28,4 +28,12 @@ public class Account {
         this.department = department;
         this.position = position;
     }
+
+    public Account(String username, String fullName, String email, Department department, Position position) {
+        this.username = username;
+        this.fullName = fullName;
+        this.email = email;
+        this.department = department;
+        this.position = position;
+    }
 }

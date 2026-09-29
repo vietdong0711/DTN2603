@@ -58,8 +58,9 @@ public class AccountRepositoryImpl implements IAccountRepository {
 
     @Override
     public boolean create(Account account) {
+        Connection connection = null;
         try {
-            Connection connection = JDBCUtils.getConnection();
+            connection = JDBCUtils.getConnection();
             String sql = "insert into account(email, username, fullname, department_id, position_id)\n" +
                     "values (?, ?, ?, ?, ?)";
             PreparedStatement statement = connection.prepareStatement(sql);
@@ -70,29 +71,57 @@ public class AccountRepositoryImpl implements IAccountRepository {
             statement.setInt(5, account.getPosition().getId());
 
             int c = statement.executeUpdate();
-            JDBCUtils.closeConnection(connection);
             return c > 0;
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
         }
         return false;
     }
 
     @Override
-    public boolean update(int id, String username) {
+    public void createAccounts(List<Account> entities) {
+        Connection connection = null;
         try {
-            Connection connection = JDBCUtils.getConnection();
+            connection.setAutoCommit(false);// mở transaction
+            connection = JDBCUtils.getConnection();
+            String sql = "insert into account(email, username, fullname, department_id, position_id)\n" +
+                    "values (?, ?, ?, ?, ?)";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            for (Account account : entities) {
+                statement.setString(1, account.getEmail());
+                statement.setString(2, account.getUsername());
+                statement.setString(3, account.getFullName());
+                statement.setInt(4, account.getDepartment().getId());
+                statement.setInt(5, account.getPosition().getId());
+                statement.addBatch();
+            }
+            statement.executeBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
+        }
+    }
+
+    @Override
+    public boolean update(int id, String username) {
+        Connection connection = null;
+        try {
+            connection = JDBCUtils.getConnection();
             String sql = "UPDATE account SET username = ? where account_id = ?";
             PreparedStatement statement = connection.prepareStatement(sql);
             statement.setString(1, username);
             statement.setInt(2, id);
 
             int c = statement.executeUpdate();
-            JDBCUtils.closeConnection(connection);
             return c > 0;
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
         }
         return false;
     }
@@ -176,6 +205,28 @@ public class AccountRepositoryImpl implements IAccountRepository {
             if (Objects.nonNull(id)) {
                 statement.setInt(2, id);
             }
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JDBCUtils.closeConnection(connection);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean login(String username, String password) {
+        Connection connection = null;
+        try {
+            connection = JDBCUtils.getConnection();
+            String  sql = "select * from account where username = ? and password = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, username);
+            statement.setString(2, password);
+
             ResultSet rs = statement.executeQuery();
             while (rs.next()) {
                 return true;

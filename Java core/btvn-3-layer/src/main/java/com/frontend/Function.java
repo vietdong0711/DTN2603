@@ -201,6 +201,14 @@ public class Function {
         }
     }
 
+    private void importCSV() {
+        System.out.println("=== Import file CSV ===");
+        System.out.println("Mời bạn nhập đường dẫn đến file:");//C:\Users\Admin\Desktop\DTN2603\Java core\csv\account_input.csv
+        String pathName = scanner.nextLine();
+        String message = accountController.importCSV(pathName);
+        System.out.println(message);
+    }
+
     public void menu() {
         while (true) {
             System.out.println("==== Mời bạn chọn chức năng ====");
@@ -208,7 +216,8 @@ public class Function {
             System.out.println("2. Thêm account");
             System.out.println("3. Xóa account theo id");
             System.out.println("4. Update account theo id");
-            System.out.println("5. Thoát");
+            System.out.println("5. Import CSV");
+            System.out.println("6. Thoát");
             String choice = scanner.nextLine();
             switch (choice) {
                 case "1":
@@ -224,9 +233,42 @@ public class Function {
                     this.update();
                     break;
                 case "5":
+                    this.importCSV();
+                    break;
+                case "6":
                     System.exit(0);
                 default:
                     System.out.println("Chọn sai! Chọn lại!");
+            }
+        }
+    }
+
+    //  lien minh huyền thooại
+    //    tạo tài khoản  .create();// insert into
+    //   đã có tk    thì muốn chơi game thì đăng nhập nhập     username + password     + ENTER
+    //  hệ thống nhận được username + password   ngưười dùng nhập vào
+    //                  kiểm tra xem có tồn tại có tồn tại tk này hay ko?
+    //                  check xem trong DB có account có username và password như trên ko
+
+    // select * from account where username = ?   AND  password  = ? ;
+
+
+
+    public void login() {
+        // nhập vào username + password
+        while (true) {
+            System.out.println("=== Login account ===");
+            System.out.println("Username: ");
+            String username = scanner.nextLine();
+            System.out.println("Password: ");
+            String password = scanner.nextLine();
+
+            if (accountController.login(username, password)) {
+                System.out.println("Login successfully!");
+                this.menu();
+                break;
+            } else {
+                System.err.println("Login failed!");
             }
         }
     }

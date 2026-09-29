@@ -1,0 +1,7 @@
+username,email,fullName,departmentId,positionId,password
+username1,email1@gmail.com,fullName1,1,1,123456
+username1,email1@gmail.com,fullName1,1,1,123456
+username2,email2@gmail.com,fullName2,2,2,123456
+username3,email3@gmail.com,fullName3,3,3,123456
+username4,email4@gmail.com,fullName4,4,4,123456
+,,,,,
