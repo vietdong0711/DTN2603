@@ -28,7 +28,7 @@ public class AccountServiceImpl implements IAccountService, ImportCSV<Account, A
     private IPositionRepository positionRepository;
 
     public AccountServiceImpl() {
-        repository = new AccountRepositoryImpl();
+        repository = new AccountRepositoryImpl();// interface  = new class
         departmentRepository = new DepartmentRepositoryImpl();
         positionRepository = new PositionRepositoryImpl();
     }
