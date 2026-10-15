@@ -53,4 +53,9 @@ public class DepartmentServiceImpl implements IDepartmentService {
         // neus ko tòn tai thi bao
         departmentRepository.deleteById(id);
     }
+
+    @Override
+    public List<Department> findByName(String name) {
+        return departmentRepository.findByNameCon(name);
+    }
 }

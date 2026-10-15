@@ -14,4 +14,6 @@ public interface IDepartmentService {
     void update(Integer id, Department department);
 
     void deleteById(Integer id);
+
+    List<Department> findByName(String name);
 }
