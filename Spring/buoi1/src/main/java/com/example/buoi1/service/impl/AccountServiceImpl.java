@@ -5,12 +5,17 @@ import com.example.buoi1.entity.Account;
 import com.example.buoi1.entity.Department;
 import com.example.buoi1.exception.BusinessException;
 import com.example.buoi1.from.AccountForm;
+import com.example.buoi1.from.AccountSearchForm;
 import com.example.buoi1.repository.IAccountRepository;
 import com.example.buoi1.repository.IDepartmentRepository;
 import com.example.buoi1.service.IAccountService;
+import com.example.buoi1.specification.AccountCustomSecification;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,17 +36,30 @@ public class AccountServiceImpl implements IAccountService {
 
 
     @Override
-    public List<AccountDTO> findAll() {
-        List<Account> accounts = accountRepository.findAll();
-        // làm sao để chuyển dc list account   -> list DTO
+    public Page<AccountDTO> findAll(AccountSearchForm searchForm, Pageable pageable) {
+        Specification<Account> where = Specification.unrestricted();// 1 = 1
 
-        List<AccountDTO> accountDTOS = new ArrayList<>();
-        for (Account account : accounts) {
-                                //object entity         object muốn chuyển thành
-            AccountDTO dto = modelMapper.map(account, AccountDTO.class);
-            accountDTOS.add(dto);
+        if (searchForm.getUsername() != null) {
+            AccountCustomSecification usernameSearch = new AccountCustomSecification("username", searchForm.getUsername());
+            where = where.and(usernameSearch);// where username like "?"
         }
-        return accountDTOS;
+
+        if (searchForm.getEmail() != null) {
+            AccountCustomSecification emailSearch = new AccountCustomSecification("email", searchForm.getEmail());
+            where = where.and(emailSearch);// where email like "?"
+        }
+
+        if (searchForm.getDepName() != null) {
+            AccountCustomSecification depNameSearch = new AccountCustomSecification("depName", searchForm.getDepName());
+            where = where.and(depNameSearch);// where dep.department_name like "?"
+        }
+        //  where 1=1 and username like "?" and email like "?" and dep.department_name like "?"
+
+        Page<Account> accounts = accountRepository.findAll(where, pageable);
+
+        // chuyển Page<Account>  -> Page<AccountDTO>
+
+        return accounts.map(account -> modelMapper.map(account, AccountDTO.class));
     }
 
     @Override
